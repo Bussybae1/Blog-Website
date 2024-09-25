@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-logo" href="#">Its_oluwabusayo's Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#">Latest</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tips & Stories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">At Work</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search blog" aria-label="Search">
+                <button class="btn btn-outline-success" type="button" onclick="navigate()">Add Blog</button>                
+            </form>
+        </div>
+        </div>
+    </nav>
+    <div class="container-fluid wrapper">
+        <form id="blogData">
+            <div class="mb-3">
+                <label for="blogTitle" class="form-label">Blog Title</label>
+                <input type="text" class="form-control" id="blogTitle">
+            </div>
+            <div class="mb-3">
+                <label for="blogDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="blogDescription" rows="3"></textarea>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="date" class="form-check-input" id="blogDate">
+                <label class="form-check-label" for="blogDate">Date Published</label>
+            </div>
+            <div class="mb-3">
+                <label for="blogAuthor" class="form-label">Blog Author</label>
+                <input type="text" class="form-control" id="blogAuthor">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="addData()">Submit</button>
+          </form>
+    </div>
+
+
+    <script type="module">
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+        
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoE31ADcGVGxfoPwB61cyvpu3oLoMXIZg",
+            authDomain: "blog-project-ff222.firebaseapp.com",
+            projectId: "blog-project-ff222",
+            storageBucket: "blog-project-ff222.appspot.com",
+            messagingSenderId: "675121758832",
+            appId: "1:675121758832:web:886bdd476308787b942ab5"
+        };
+
+        const blogData = document.getElementById('blogData');
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        // Initialize firestore
+        const db = getFirestore(app);
+
+        blogData.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            
+            const blogTitle= document.getElementById('blogTitle');
+            const blogDescription= document.getElementById('blogDescription');
+            const blogDate= document.getElementById('blogDate');
+            const blogAuthor= document.getElementById('blogAuthor');
+        try {
+            const docRef = await addDoc(collection(db, "posts"), {
+                title: blogTitle.value,
+                content: blogDescription.value,
+                datePublished: blogDate.value, // Saving date
+                author: blogAuthor.value, 
+                timestamp: new Date(),
+            });
+            console.log("Document written with ID: ", docRef.id);
+            alert('Blog post added successfully')
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+        })
+
+        
+    </script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</html>
